@@ -2,6 +2,15 @@ import numpy as np
 import math, cmath
 from scipy import linalg as LA
 
+
+def mixed_fidelity(rho1,rho2):
+    '''This functions calculates state fidelity between two state matrices.'''
+    w1,v1 = LA.eig(rho1) # diagonalising rho1
+    w,v = LA.eig(v1@np.diag(np.sqrt(w1))@LA.inv(v1)@rho2@v1@np.diag(np.sqrt(w1))@LA.inv(v1)) #diagonalising the term inside the square root
+    argtr = v@np.diag(np.sqrt(w))@LA.inv(v) # Trace argument
+    result = np.real((np.trace(argtr))**2)
+    return result
+
 def log_negativity(rho):
     '''This function calculates logarithmic negativity of the state rho for two qubits. '''
     n1 = rho.shape[0]//2
@@ -21,7 +30,7 @@ def log_negativity(rho):
     if eig_sum<1:
         eig_sum = 1.0
             
-    result = math.log2(eig_sum)
+    result = np.real(math.log2(eig_sum))
     return result
     
 
