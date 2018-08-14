@@ -6,7 +6,6 @@ import math, cmath
 from scipy import linalg as LA
 
 
-
 # --- Environment's state ---
 epsilon = 0.5
 b_ee = math.sqrt(1.0/(2.0+epsilon)) + 0j
@@ -22,12 +21,23 @@ lambda1, lambda2 = 1.0e+1, 1.0e+1
 
 # --- time step ---
 dt = 1.0e-3
-counter = round(1000.0/dt)
+counter = round(100.0/dt)
 ntraj = 1
 
 # --- Dimensionless gammas ---
 g1 = (lambda1*dt)**2
 g2 = (lambda2*dt)**2
+
+# --- which maps ---
+# 1 = local_maps, 2 = joint_maps
+ch = 2
+
+
+# --- joint measurement parameters ---
+alpha_plus  = np.conj(b_ee)*(b_ee + b_gg)
+alpha_minus = np.conj(b_ee)*(b_ee - b_gg)
+beta_plus   = np.conj(b_gg)*(b_ee + b_gg)
+beta_minus  = np.conj(b_gg)*(b_ee - b_gg)
 
 
 # --- defining lowering (sigma) and rasing operators (sigma^\dagger) ---
