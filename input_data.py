@@ -21,7 +21,7 @@ lambda1, lambda2 = 1.0e+1, 1.0e+1
 
 # --- time step ---
 dt = 1.0e-3
-counter = round(100.0/dt)
+counter = round(1000.0/dt)
 ntraj = 1
 
 # --- Dimensionless gammas ---
@@ -30,8 +30,8 @@ g2 = (lambda2*dt)**2
 
 # --- which maps ---
 # 1 = local_maps, 2 = joint_maps
-ch = 2
-
+ch = 3
+name = 'joint'
 
 # --- joint measurement parameters ---
 alpha_plus  = np.conj(b_ee)*(b_ee + b_gg)
