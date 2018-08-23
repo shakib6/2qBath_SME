@@ -47,7 +47,7 @@ def two_qb_cor(rho):
     result = 0.25*(1.0+t_sqrd)
     return result
     
-def two_qb_block_vec(rho):
+def two_qb_bloch_vec(rho):
     '''This function calculates the Bloch vectors of a 2-qubit system. Ref: PRA 93,062320 (2016). '''
     x1 =  2*np.real(rho[0,2]+rho[1,3])
     y1 = -2*np.imag(rho[0,2]+rho[1,3])
@@ -60,7 +60,7 @@ def two_qb_block_vec(rho):
     rho_b = np.array([x2,y2,z2])
     return (rho_a,rho_b)
 
-def two_qb_block_cor(rho):
+def two_qb_bloch_cor(rho):
     '''This function calculates the Bloch vector coordinates of a 2-qubit system. Ref: PRA 93,062320 (2016). '''
     x1 =  2*np.real(rho[0,2]+rho[1,3])
     y1 = -2*np.imag(rho[0,2]+rho[1,3])
