@@ -6,8 +6,13 @@ import math, cmath
 from scipy import linalg as LA
 
 
+
+# --- Initial system state ---
+a = 0.5
+b = math.sqrt(1.0-abs(a)**2)
+
 # --- Environment's state ---
-epsilon = 0.5
+epsilon = 0.0
 b_ee = math.sqrt(1.0/(2.0+epsilon)) + 0j
 b_gg = math.sqrt((1.0+epsilon)/(2.0+epsilon)) + 0j
 b_eg = math.sqrt(0.0/4.0) + 0j
@@ -17,21 +22,21 @@ if abs(b_ee)**2 + abs(b_eg)**2 + abs(b_gg)**2 + abs(b_ge)**2 < 0.99999:
     print('>>>>> The state of the bath is not normalised.')
     
 # --- Coupling strengths ---
-lambda1, lambda2 = 1.0e+1, 1.0e+1
+lambda1, lambda2 = 1.0e+2, 1.0e+2
 
 # --- time step ---
 dt = 1.0e-3
-counter = round(1000.0/dt)
-ntraj = 1
+counter = round(10.0/dt)
+ntraj = 5000
 
 # --- Dimensionless gammas ---
 g1 = (lambda1*dt)**2
 g2 = (lambda2*dt)**2
 
 # --- which maps ---
-# 1 = local_maps, 2 = joint_maps
-ch = 3
-name = 'joint'
+# 1 = local_maps, 2 = joint_maps, 3 = energy-space_map
+ch = 1
+name = 'local'
 
 # --- joint measurement parameters ---
 alpha_plus  = np.conj(b_ee)*(b_ee + b_gg)
@@ -64,6 +69,9 @@ rho_c_u2 = np.zeros((4,4),dtype=np.complex128)
 rho_c_u3 = np.zeros((4,4),dtype=np.complex128)
 rho_c_u4 = np.zeros((4,4),dtype=np.complex128)
 
+# --- Joint system S.S. ---
+rho_ss = np.zeros((4,4),dtype=np.complex128)
+rho_eq = np.zeros((4,4,ntraj),dtype=np.complex128)
 
 log_neg_c = np.zeros((ntraj,counter+1),dtype=np.complex128)
 # tq_cor  = np.zeros(counter+1,dtype=np.complex128)
@@ -82,10 +90,3 @@ y2_c = np.zeros((ntraj,counter+1),dtype=np.float64)
 z2_c = np.zeros((ntraj,counter+1),dtype=np.float64)
 
 
-
-# --- Joint system S.S. ---
-rho_ss = np.zeros((4,4),dtype=np.complex128)
-rho_ss[0,0] = 1.0/(2.0+epsilon)
-rho_ss[0,3] = -math.sqrt(1.0+epsilon)/(2.0+epsilon)
-rho_ss[3,0] = np.conj(rho_ss[0,3])
-rho_ss[3,3] = (1.0+epsilon)/(2.0+epsilon)

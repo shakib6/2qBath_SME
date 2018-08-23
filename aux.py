@@ -4,15 +4,33 @@ from scipy import linalg as LA
 from input_data import *
 
 
-def rho_init(a=0.0,b=0.0,rho_c1=0.5*np.identity(2),rho_c2=0.5*np.identity(2)):
-    if a == 0 and b == 0:
-        rho_c = np.kron(rho_c1,rho_c2)
+def rho_init(a=0.0,b=0.0,rho_1=0.5*np.identity(2),rho_2=0.5*np.identity(2)):
+    if a == 0.0 and b == 0.0:
+        rho = np.kron(rho_1,rho_2)
     else:
-        rho_c[0,0] = (a+b)**2/2.0
-        rho_c[3,3] = (a-b)**2/2.0
-        rho_c[0,3] = (a**2-b**2)/2.0
-        rho_c[3,0] = (a**2-b**2)/2.0
-    result = rho_c   
+        rho = np.zeros((4,4),dtype=np.complex128)
+        rho[0,0] = (a+b)**2/2.0
+        rho[3,3] = (a-b)**2/2.0
+        rho[0,3] = (a**2-b**2)/2.0
+        rho[3,0] = (a**2-b**2)/2.0
+    result = rho   
+    return result
+
+def steady_state(epsilon=0.0):
+    if epsilon == 0.0:
+        rho_in = rho_init(a,b)
+        rho_ss[0,0] = 1.0/3.0*(rho_in[0,0]+rho_in[3,3]-rho_in[0,3]+0.5*(rho_in[1,1]+rho_in[2,2]))
+        rho_ss[1,1] = 1.0/3.0*(0.5*(rho_in[0,0]+rho_in[3,3])+rho_in[0,3]+rho_in[1,1]+rho_in[2,2])
+        rho_ss[2,2] = rho_ss[1,1]
+        rho_ss[3,3] = rho_ss[0,0]
+        rho_ss[0,3] = 1.0/6.0*(-rho_in[0,0]-rho_in[3,3]+4.0*rho_in[0,3]+rho_in[1,1]+rho_in[2,2])
+        rho_ss[3,0] = np.conj(rho_ss[0,3])
+    else:
+        rho_ss[0,0] = 1.0/(2.0+epsilon)
+        rho_ss[0,3] = -math.sqrt(1.0+epsilon)/(2.0+epsilon)
+        rho_ss[3,0] = np.conj(rho_ss[0,3])
+        rho_ss[3,3] = (1.0+epsilon)/(2.0+epsilon)
+    result = rho_ss
     return result
 
 
